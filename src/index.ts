@@ -25,7 +25,7 @@ const defaults = {
 
 function promptHandler(config: PromptConfig, done: DoneHandler): string[] {
     const configWithDefaults = { ...defaults, ...config }
-    const { prefix, choices, selectionMarker, pageSize } = configWithDefaults
+    const { message, choices, selectionMarker } = configWithDefaults
     /*
      * Choices are normalized so that they are always of the form
      * { name: string, value: string, short?: string }.
@@ -74,14 +74,14 @@ function promptHandler(config: PromptConfig, done: DoneHandler): string[] {
         selectionMarker,
     )
 
-    const promptQuestion = getPromptQuestion(searchTerm, prefix)
+    const promptQuestion = getPromptQuestion(searchTerm, message)
 
     if (visibleChoices.length === 0) {
         return [promptQuestion, 'No matches']
     }
 
     if (isDone) {
-        return [`${prefix} ${chalk.bold(selectedItem.name)}`]
+        return [`${message} ${chalk.bold(selectedItem.name)}`]
     }
 
     return [
