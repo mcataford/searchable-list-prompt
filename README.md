@@ -12,7 +12,7 @@ yarn add https://github.com/mcataford/inquirer-searchable-list#initial
 
 ## Usage
 
-```
+```js
 import searchableListPrompt from 'inquirer-searchable-list'
 
 const theChosenOne = await searchableListPrompt({
