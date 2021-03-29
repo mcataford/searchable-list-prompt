@@ -1,6 +1,10 @@
 {
   "name": "inquirer-searchable-list",
+  "version": "0.0.0",
+  "files": ["lib/*", "!lib/example.js"],
+  "main": "lib/index.js",
   "scripts": {
+    "prepack": "rm -rf lib && run build",
     "lint": "run eslint ./src ./*.js",
     "lint:fix": "run lint --fix",
     "types": "run tsc --noEmit",
