@@ -8,7 +8,11 @@ export function normalizeChoices(choices: Choice[]): NormalizedChoice[] {
     for (const choice of choices) {
         if (typeof choice === 'object')
             normalizedChoices.push({ name: choice.value, ...choice })
-        else normalizedChoices.push({ name: String(choice), value: String(choice) })
+        else
+            normalizedChoices.push({
+                name: String(choice),
+                value: String(choice),
+            })
     }
 
     return normalizedChoices
@@ -29,6 +33,19 @@ function getRegexp(searchTerm: string): RegExp {
         /* Invalid regexp, use as literal */
         return RegExp(searchTerm.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'))
     }
+}
+
+export function filterBySearchTerm(
+    choices: NormalizedChoice[],
+    searchTerm: string,
+): NormalizedChoice[] {
+    if (!searchTerm) return choices
+
+    const searchTermPattern = getRegexp(searchTerm)
+
+    return choices.filter((choice: NormalizedChoice) => {
+        return searchTermPattern.test(choice.name)
+    })
 }
 
 export function prepareVisibleChoices(
