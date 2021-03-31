@@ -4,7 +4,7 @@
   "files": ["lib/*", "!lib/example.js"],
   "main": "lib/index.js",
   "scripts": {
-    "prepack": "rm -rf lib && run build",
+    "prepack": "rm -rf lib && build",
     "lint": "run eslint ./src ./*.js",
     "lint:fix": "run lint --fix",
     "types": "run tsc --noEmit",
