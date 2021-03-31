@@ -1,7 +1,10 @@
 {
   "name": "inquirer-searchable-list",
   "version": "0.0.0",
-  "files": ["lib/*", "!lib/example.js"],
+  "files": [
+    "lib/*",
+    "!lib/example.js"
+  ],
   "main": "lib/index.js",
   "scripts": {
     "prepack": "run build",
