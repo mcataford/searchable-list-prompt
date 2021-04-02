@@ -10,8 +10,24 @@ env:
   CI: 1
 
 jobs:
-  tests:
-    name: Lint & Tests
+  types:
+    name: Types
+    runs-on: ubuntu-20.04
+    steps:
+        - uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+        - name: Setup Node.js
+          uses: actions/setup-node@v1
+          with:
+            node-version: '14'
+        - name: Install dependencies
+          run: |
+            yarn install --immutable
+        - name: Build
+          run: yarn types
+  build:
+    name: Build
     runs-on: ubuntu-20.04
     steps:
         - uses: actions/checkout@v2
@@ -26,5 +42,19 @@ jobs:
             yarn install --immutable
         - name: Build
           run: yarn build
+  tests:
+    name: Lint & Tests
+    runs-on: ubuntu-20.04
+    steps:
+        - uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+        - name: Setup Node.js
+          uses: actions/setup-node@v1
+          with:
+            node-version: '14'
+        - name: Install dependencies
+          run: |
+            yarn install --immutable
         - name: Linting
           run: yarn lint
