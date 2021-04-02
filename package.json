@@ -7,13 +7,13 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "prepack": "run build",
-    "lint": "run eslint ./src ./*.js",
-    "lint:fix": "run lint --fix",
-    "types": "run tsc --noEmit",
-    "types:watch": "run types --watch",
-    "build": "run babel --config-file ./babel.config.js ./src/ --out-dir ./lib/ --no-copy-ignored --extensions '.ts'",
-    "build:watch": "run build --watch"
+    "prepack": "yarn build",
+    "lint": "yarn eslint ./src ./*.js",
+    "lint:fix": "yarn lint --fix",
+    "types": "yarn tsc --noEmit",
+    "types:watch": "yarn types --watch",
+    "build": "babel --config-file ./babel.config.js ./src/ --out-dir ./lib/ --no-copy-ignored --extensions '.ts'",
+    "build:watch": "yarn build --watch"
   },
   "resolution": {
     "typescript": "4.1.5"
