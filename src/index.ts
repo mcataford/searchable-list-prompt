@@ -12,6 +12,7 @@ import {
 import {
     filterBySearchTerm,
     getPromptQuestion,
+    getVisibleWindowBoundaries,
     isDownKey,
     isEnterKey,
     isUpKey,
@@ -22,7 +23,8 @@ import {
 
 const defaults = {
     selectionMarker: '-',
-    pageSize: 20,
+    pageSize: 3,
+    noMatchesMessage: 'No matches',
 }
 
 function promptHandler(config: PromptConfig, done: DoneHandler) {
@@ -42,88 +44,89 @@ function promptHandler(config: PromptConfig, done: DoneHandler) {
 }
 
 function _promptHandler(config: PromptConfig, done: DoneHandler): string[] {
-    const { message, choices, selectionMarker, pageSize } = config
     const [searchTerm, setSearchTerm] = useState('')
     const [isDone, setIsDone] = useState(false)
-    const [selectedItem, setSelectedItem] = useState(choices[0])
+    const [selectedItem, setSelectedItem] = useState(config.choices[0])
     const [visibleChoices, setVisibleChoices] = useState(
-        choices.slice(0, pageSize),
+        config.choices.slice(0, config.pageSize),
     )
     useKeypress((event: KeyboardEvent, rl: ReadlineInterface) => {
-        const availableChoices = filterBySearchTerm(choices, searchTerm)
+        const availableChoices = filterBySearchTerm(config.choices, searchTerm)
 
         const hasVisibleChoices = visibleChoices.length > 0
         const selectedIndex = visibleChoices.findIndex(
             (choice: NormalizedChoice) => choice.value === selectedItem.value,
         )
-        const currentStartIndex = availableChoices.findIndex(
-            (choice: NormalizedChoice) =>
-                choice.value === visibleChoices[0].value,
+        const [currentStartIndex, currentEndIndex] = getVisibleWindowBoundaries(
+            visibleChoices,
+            availableChoices,
         )
-        const currentEndIndex = availableChoices.findIndex(
-            (choice: NormalizedChoice) =>
-                choice.value ===
-                visibleChoices[visibleChoices.length - 1].value,
-        )
-
+        const newVisibleChoices = [...visibleChoices]
         if (isEnterKey(event) && hasVisibleChoices) {
             setIsDone(true)
             done(selectedItem.value)
         } else if (isUpKey(event) && hasVisibleChoices) {
             const isMovingWindow =
-                availableChoices.length > pageSize && selectedIndex === 0
+                availableChoices.length > config.pageSize && selectedIndex === 0
             if (isMovingWindow) {
                 const isWrapping = currentStartIndex === 0
                 const nextStart = isWrapping
                     ? availableChoices.length - 1
                     : currentStartIndex - 1
-
-                visibleChoices.pop()
-                visibleChoices.unshift(availableChoices[nextStart])
+                newVisibleChoices.pop()
+                newVisibleChoices.unshift(availableChoices[nextStart])
+                setVisibleChoices(
+                    prepareVisibleChoices(newVisibleChoices, searchTerm),
+                )
             }
-            setVisibleChoices(prepareVisibleChoices(visibleChoices, searchTerm))
-            setSelectedItem(visibleChoices[Math.max(0, selectedIndex - 1)])
+            setSelectedItem(newVisibleChoices[Math.max(0, selectedIndex - 1)])
         } else if (isDownKey(event) && hasVisibleChoices) {
             const isMovingWindow =
-                availableChoices.length > pageSize &&
+                availableChoices.length > config.pageSize &&
                 selectedIndex === visibleChoices.length - 1
             if (isMovingWindow) {
                 const isWrapping =
                     currentEndIndex === availableChoices.length - 1
 
                 const nextStart = isWrapping ? 0 : currentEndIndex + 1
-                visibleChoices.push(availableChoices[nextStart])
-                visibleChoices.shift()
+                newVisibleChoices.push(availableChoices[nextStart])
+                newVisibleChoices.shift()
+                setVisibleChoices(
+                    prepareVisibleChoices(newVisibleChoices, searchTerm),
+                )
             }
 
-            setVisibleChoices(visibleChoices)
             setSelectedItem(
-                visibleChoices[
-                    Math.min(selectedIndex + 1, visibleChoices.length - 1)
+                newVisibleChoices[
+                    Math.min(selectedIndex + 1, newVisibleChoices.length - 1)
                 ],
             )
         } else {
-            const searchTerm = rl.line
-            const newVisibleChoices = prepareVisibleChoices(choices, searchTerm)
-            setSearchTerm(searchTerm)
-            setVisibleChoices(newVisibleChoices.slice(0, pageSize))
+            const newSearchTerm = rl.line
+            setSearchTerm(newSearchTerm)
+            setVisibleChoices(
+                prepareVisibleChoices(config.choices, newSearchTerm).slice(
+                    0,
+                    config.pageSize,
+                ),
+            )
         }
     })
 
     const choicesWithSelection = markSelection(
         visibleChoices,
         selectedItem,
-        selectionMarker,
+        config.selectionMarker,
     )
 
-    const promptQuestion = getPromptQuestion(searchTerm, message)
+    const promptQuestion = getPromptQuestion(searchTerm, config.message)
 
     if (visibleChoices.length === 0) {
-        return [promptQuestion, 'No matches']
+        return [promptQuestion, config.noMatchesMessage]
     }
 
     if (isDone) {
-        return [`${message} ${chalk.bold(selectedItem.name)}`]
+        return [`${config.message} ${chalk.bold(selectedItem.name)}`]
     }
 
     return [

@@ -2,6 +2,21 @@ import chalk from 'chalk'
 
 import { Choice, KeyboardEvent, NormalizedChoice } from './types'
 
+export function getVisibleWindowBoundaries(
+    visibleChoices: NormalizedChoice[],
+    availableChoices: NormalizedChoice[],
+): number[] {
+    const currentStartIndex = availableChoices.findIndex(
+        (choice: NormalizedChoice) => choice.value === visibleChoices[0].value,
+    )
+    const currentEndIndex = availableChoices.findIndex(
+        (choice: NormalizedChoice) =>
+            choice.value === visibleChoices[visibleChoices.length - 1].value,
+    )
+
+    return [currentStartIndex, currentEndIndex]
+}
+
 export function normalizeChoices(choices: Choice[]): NormalizedChoice[] {
     const normalizedChoices = []
 
