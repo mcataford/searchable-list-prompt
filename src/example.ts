@@ -1,8 +1,8 @@
 import searchableListPrompt from '.'
 
 searchableListPrompt({
-    message: 'Make your choice: ',
-    choices: ['a', 'b', 'c', 'cb', 'ab', 'ac'],
+    message: "Who's the boss?: ",
+    choices: ['Tony', 'Angela', 'Samantha', 'Jonathan', 'Mona'],
 })
     .then((result: string) => {
         console.log(result)

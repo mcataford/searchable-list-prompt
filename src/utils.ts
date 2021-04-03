@@ -2,6 +2,15 @@ import chalk from 'chalk'
 
 import { Choice, KeyboardEvent, NormalizedChoice } from './types'
 
+export function isSelectedItemVisible(
+    selectedItem: NormalizedChoice,
+    visibleWindow: NormalizedChoice[],
+): boolean {
+    return visibleWindow.some(
+        (item: NormalizedChoice) => item.value === selectedItem?.value,
+    )
+}
+
 export function getVisibleWindowBoundaries(
     visibleChoices: NormalizedChoice[],
     availableChoices: NormalizedChoice[],

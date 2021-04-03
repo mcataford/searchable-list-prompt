@@ -4,10 +4,13 @@ A small [Inquirer.js](https://github.com/SBoudrias/Inquirer.js)-based CLI prompt
 
 ## Install
 
-_Until this is on NPM..._
-
 ```
-yarn add https://github.com/mcataford/searchable-list-prompt#initiali
+// For the very latest
+yarn add https://github.com/mcataford/searchable-list-prompt#main
+
+// For the latest published
+yarn add searchable-list-prompt
+
 ```
 
 ## Usage
@@ -21,11 +24,17 @@ const theChosenOne = await searchableListPrompt({
 })
 ```
 
+<img src="./demo.gif"/>
+
 ## Features
+
+### Searching
+
+You can enter regular expressions in the prompt to search through choices. If a regexp is incomplete or invalid, it's taken as-is as a search string.
 
 ### Choices
 
-`choices` is a function or an array of items used to populate the prompt's list. It can be a list of __strings__, __numbers__ or __objects__. In the case of object choices, they should have same format as [the `choices` parameter described by Inquirer](https://github.com/SBoudrias/Inquirer.js#objects).
+`choices` is an array of items used to populate the prompt's list. It can be a list of __strings__, __numbers__ or __objects__. In the case of object choices, they should have same format as [the `choices` parameter described by Inquirer](https://github.com/SBoudrias/Inquirer.js#objects).
 
 ### Page Size
 

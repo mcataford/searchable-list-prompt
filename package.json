@@ -1,5 +1,5 @@
 {
-  "name": "inquirer-searchable-list",
+  "name": "searchable-list-prompt",
   "version": "0.0.0",
   "files": [
     "lib/*",
