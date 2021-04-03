@@ -15,6 +15,7 @@ import {
     getVisibleWindowBoundaries,
     isDownKey,
     isEnterKey,
+    isSelectedItemVisible,
     isUpKey,
     markSelection,
     normalizeChoices,
@@ -104,12 +105,25 @@ function _promptHandler(config: PromptConfig, done: DoneHandler): string[] {
         } else {
             const newSearchTerm = rl.line
             setSearchTerm(newSearchTerm)
+            const newFilteredChoices = filterBySearchTerm(
+                config.choices,
+                newSearchTerm,
+            )
             setVisibleChoices(
-                prepareVisibleChoices(config.choices, newSearchTerm).slice(
+                prepareVisibleChoices(newFilteredChoices, newSearchTerm).slice(
                     0,
                     config.pageSize,
                 ),
             )
+
+            if (
+                !isSelectedItemVisible(
+                    selectedItem,
+                    newFilteredChoices.slice(0, config.pageSize),
+                )
+            ) {
+                setSelectedItem(newFilteredChoices[0])
+            }
         }
     })
 
