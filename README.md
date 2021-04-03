@@ -4,10 +4,8 @@ A small [Inquirer.js](https://github.com/SBoudrias/Inquirer.js)-based CLI prompt
 
 ## Install
 
-_Until this is on NPM..._
-
 ```
-yarn add https://github.com/mcataford/searchable-list-prompt#initiali
+yarn add https://github.com/mcataford/searchable-list-prompt#main
 ```
 
 ## Usage
@@ -20,6 +18,8 @@ const theChosenOne = await searchableListPrompt({
     choices: ['Luke', 'Anakin', 'Frodo']
 })
 ```
+
+<img src="./demo.gif"/>
 
 ## Features
 
