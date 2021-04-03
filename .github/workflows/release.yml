@@ -21,4 +21,4 @@ jobs:
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
               run:
-                  yarn publish --access public --tag latest --new-version ${{steps.get_tag.outputs.tag}}
+                  yarn npm publish --access public --tag latest --new-version ${{steps.get_tag.outputs.tag}}
