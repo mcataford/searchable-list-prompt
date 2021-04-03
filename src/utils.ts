@@ -7,7 +7,7 @@ export function isSelectedItemVisible(
     visibleWindow: NormalizedChoice[],
 ): boolean {
     return visibleWindow.some(
-        (item: NormalizedChoice) => item.value === selectedItem.value,
+        (item: NormalizedChoice) => item.value === selectedItem?.value,
     )
 }
 
