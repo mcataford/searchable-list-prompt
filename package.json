@@ -1,10 +1,21 @@
 {
   "name": "searchable-list-prompt",
   "version": "0.0.0",
+  "description": "A small customizable, searchable list prompt for your CLI apps",
+  "author": "Marc Cataford <mcat@riseup.net>",
+  "keywords": ["inquirer", "cli", "prompt", "search", "terminal"],
   "files": [
     "lib/*",
     "!lib/example.js"
   ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mcataford/searchable-list-prompt.git"
+  },
+  "bugs": {
+      "url": "https://github.com/mcataford/searchable-list-prompt/issues"
+  },
   "main": "lib/index.js",
   "scripts": {
     "prepack": "yarn build",
